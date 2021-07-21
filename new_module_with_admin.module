@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ * New module with admin
+ */
+
+module_load_include(
+  'inc',
+  'new_module_with_admin',
+  'includes/new_module_with_admin_access_by_role'
+);
+
+/**
+ * Implements hook_menu().
+ */
+function new_module_with_admin_menu() {
+  $items['admin/config/media/new-module-admin'] = [
+    'title' => 'New module with admin',
+    'description' => 'Настройки модуля New module with admin',
+    'page callback' => 'new_module_with_admin_admin_page_contents',
+    'access callback' => 'new_module_with_admin_access_by_role',
+    'access arguments' => [['administrator']],
+    'file path' => drupal_get_path('module', 'new_module_with_admin'),
+    'file' => 'includes/new_module_with_admin_admin_page_contents.inc',
+    'menu_name' => 'management',
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 0,
+  ];
+
+  $items['media/streams'] = [
+    'title' => 'Онлайн трансляции',
+    'description' => 'Прямые онлайн видеотрансляции на шахматные темы',
+    'page callback' => 'new_module_with_admin_streams_page_contents',
+    'access callback' => TRUE,
+    'file path' => drupal_get_path('module', 'new_module_with_admin'),
+    'file' => 'includes/new_module_with_admin_streams_page_contents.inc',
+    'menu_name' => 'menu-horizontal-menu',
+    'type' => MENU_CALLBACK,
+    'weight' => 0,
+  ];
+
+  return $items;
+}

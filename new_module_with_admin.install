@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * Performs database updates and uninstallation cleanup for the New module with
+ * admin module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function new_module_with_admin_install() {
+  db_update('system')
+    ->fields(['weight' => 100])
+    ->condition('type', 'module')
+    ->condition('name', 'new_module_with_admin')
+    ->execute();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function new_module_with_admin_uninstall() {
+  cache_clear_all('new_module_with_admin', 'cache', TRUE);
+  cache_clear_all('new_module_with_admin_streams', 'cache', TRUE);
+  drupal_uninstall_schema('new_module_with_admin');
+  drupal_uninstall_schema('new_module_with_admin_streams');
+  menu_rebuild();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function new_module_with_admin_schema() {
+  $schema['new_module_with_admin'] = [
+    'fields' => [
+      'id' => ['type' => 'serial', 'size' => 'normal', 'not null' => TRUE],
+      'client_id' => ['type' => 'varchar', 'length' => 255, 'not null' => TRUE],
+      'twitch_api_url' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'text' => ['type' => 'text'],
+      'ad_content_before' => ['type' => 'text'],
+      'ad_content_after' => ['type' => 'text'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  $schema['new_module_with_admin_streams'] = [
+    'fields' => [
+      'id' => ['type' => 'serial', 'size' => 'normal', 'not null' => TRUE],
+      'user_name' => ['type' => 'varchar', 'length' => 255, 'not null' => TRUE],
+      'stream_name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'status' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ],
+    ],
+    'unique keys' => [
+      'user_streams' => ['user_name', 'stream_name'],
+    ],
+    'primary key' => ['id'],
+  ];
+
+  return $schema;
+}

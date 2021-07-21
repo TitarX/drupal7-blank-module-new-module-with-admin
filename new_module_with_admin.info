@@ -1,0 +1,16 @@
+name = New module with admin
+description = New module with admin
+core = 7.x
+package = EXTRA
+configure = admin/config/media/new-module-admin
+
+files[] = new_module_with_admin.install
+files[] = new_module_with_admin.module
+files[] = includes/new_module_with_admin_access_by_role.inc
+files[] = includes/new_module_with_admin_admin_page_contents.inc
+files[] = includes/new_module_with_admin_availability_stream_checking.inc
+files[] = includes/new_module_with_admin_streams_page_contents.inc
+
+stylesheets[all][] = css/new_module_with_admin.css
+
+scripts[] = js/new_module_with_admin.js
